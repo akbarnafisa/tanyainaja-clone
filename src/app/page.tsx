@@ -1,113 +1,170 @@
-import Image from 'next/image'
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import Link from "next/link";
+import {
+  ArrowRightIcon,
+  CodeIcon,
+  CrumpledPaperIcon,
+  CubeIcon,
+  HandIcon,
+  LightningBoltIcon,
+  Link2Icon,
+  LockOpen1Icon,
+  MagnifyingGlassIcon,
+} from "@radix-ui/react-icons";
+
+import imagehero from "~/public/images/pexels-rdne-stock-project-5756742.jpg";
+import logoImage from "~/public/logo/TanyaAja.svg";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">src/app/page.tsx</code>
+    <main>
+      <section className="flex flex-col md:flex-row">
+        <div className="flex-1 flex flex-col gap-4 justify-center items-start p-8">
+          <Image
+            src={logoImage}
+            alt="Simbol tanda tanya"
+            width={100}
+            height={83.8}
+          ></Image>
+          <h1 className="font-extrabold text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
+            TanyaAja
+          </h1>
+          <p className="text-md md:text-lg lg:text-xl text-muted-foreground">
+            Kumpulkan pertanyaan secara anonim dari siapa saja dengan mudah
+          </p>
+
+          <div className="w-full flex gap-2 mt-8 flex-col lg:flex-row">
+            <Button className="flex gap-2 items-center" size="lg" asChild>
+              <Link href="/login">
+                Mulai dengan cepat
+                <ArrowRightIcon className="w-6 h-6" />
+              </Link>
+            </Button>
+
+            <Button
+              variant="outline"
+              className="flex gap-2 items-center"
+              size="lg"
+              asChild
+            >
+              <Link href="/eksplor">
+                Eksplor dulu
+                <MagnifyingGlassIcon className="w-6 h-6" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+        <div className="p-4">
+          <Image
+            src={imagehero}
+            alt="Laki-laki sedang mengacungkan tangan"
+            className="rounded-3xl"
+          />
+        </div>
+      </section>
+
+      <section className="container mx-auto mt-24 mb-16 flex flex-col justify-center items-center gap-4">
+        <h2 className="font-extrabold text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-center">
+          Fitur
+        </h2>
+        <p className="text-center text-md md:text-lg lg:text-xl text-muted-foreground">
+          Berbagai fitur yang bisa didapatkan dari platform TanyaAja
         </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
+        <div className="mx-auto grid justify-center gap-4 sm:grid-cols-2 md:max-w-[64rem] md:grid-cols-3 mt-8">
+          <Card>
+            <CardHeader>
+              <LightningBoltIcon className="w-14 h-14 mb-4" />
+              <CardTitle>Gratis Tanpa Iklan</CardTitle>
+              <CardDescription>
+                Bisa digunakan secara gratis tanpa gangguan iklan
+              </CardDescription>
+            </CardHeader>
+          </Card>
+          <Card>
+            <CardHeader>
+              <Link2Icon className="w-14 h-14 mb-4" />
+              <CardTitle>Mudah Dibagikan</CardTitle>
+              <CardDescription>
+                Kamu bisa membagikan laman publik dan pertanyaan kepada siapa
+                saja yang diinginkan dengan cepat
+              </CardDescription>
+            </CardHeader>
+          </Card>
+          <Card>
+            <CardHeader>
+              <HandIcon className="w-14 h-14 mb-4" />
+              <CardTitle>Kontrol Penuh</CardTitle>
+              <CardDescription>
+                Kamu bisa menentukan apakah sebuah pertanyaan bisa dilihat orang
+                lain atau tidak, bisa memilih untuk tidak dilihat di laman
+                eksplor, bisa menghapus akun seutuhnya
+              </CardDescription>
+            </CardHeader>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CrumpledPaperIcon className="w-14 h-14 mb-4" />
+              <CardTitle>Baca dan Buang</CardTitle>
+              <CardDescription>
+                Tidak perlu lama-lama menyimpan pertanyaan, setelah dibaca kami
+                akan menghapus data pertanyaan kamu seutuhnya
+              </CardDescription>
+            </CardHeader>
+          </Card>
+          <Card>
+            <CardHeader>
+              <LockOpen1Icon className="w-14 h-14 mb-4" />
+              <CardTitle>Otentikasi Mudah</CardTitle>
+              <CardDescription>
+                Tidak perlu membuat dan mengingat password baru, cukup login
+                dengan akun Google
+              </CardDescription>
+            </CardHeader>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CubeIcon className="w-14 h-14 mb-4" />
+              <CardTitle>Kode Sumber Terbuka</CardTitle>
+              <CardDescription>
+                Penasaran bagaimana cara kerjanya? Langsung saja cek apa yang
+                dilakukan di balik layar dengan melihat langsung kode sumbernya
+              </CardDescription>
+            </CardHeader>
+          </Card>
+        </div>
+      </section>
+
+      <section className="container mx-auto max-w-[58rem] my-24 flex flex-col justify-center items-center gap-4">
+        <h2 className="font-extrabold text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-center">
+          Kode Sumber Terbuka
+        </h2>
+        <p className="max-w-[85%] text-center text-md md:text-lg lg:text-xl text-muted-foreground">
+          TanyaAja adalah aplikasi dengan kode sumber terbuka yang didukung pula
+          dengan banyak pustaka kode sumber terbuka.
+        </p>
+        <Button
+          variant="outline"
+          className="flex gap-2 items-center"
+          size="lg"
+          asChild
+        >
           <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
+            href="https://github.com/mazipan/tanyaaja"
             target="_blank"
             rel="noopener noreferrer"
           >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
+            <CodeIcon className="w-6 h-6" />
+            Lihat kode sumber
           </a>
-        </div>
-      </div>
-
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700 before:dark:opacity-10 after:dark:from-sky-900 after:dark:via-[#0141ff] after:dark:opacity-40 before:lg:h-[360px] z-[-1]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore the Next.js 13 playground.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
+        </Button>
+      </section>
     </main>
-  )
+  );
 }
