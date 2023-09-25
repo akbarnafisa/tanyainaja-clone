@@ -21,3 +21,22 @@ export const postAddUser = async (user: User): Promise<{ message: string }> => {
 
   return rawRes.json()
 }
+
+export const destroyActiveSession = async (
+  user: User,
+): Promise<{ message: string }> => {
+  const token = await user.getIdToken()
+
+  const rawRes = await fetch(`${BASEURL}/api/private/user/session-destroy`, {
+    method: 'DELETE',
+    body: JSON.stringify({
+      uid: user.uid,
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token,
+    },
+  })
+
+  return rawRes.json()
+}

@@ -109,3 +109,27 @@ export const createSession = async (param: CreateSessionArgs) => {
 
   return response
 }
+
+
+export const destroySession = async (pageId: string) => {
+  const response = await notion.pages.update({
+    page_id: pageId,
+    archived: true,
+  })
+
+  return response
+}
+
+export const getSession = async (token: string) => {
+  const response = await notion.databases.query({
+    database_id: DB_SESSION,
+    filter: {
+      property: 'token',
+      title: {
+        equals: token,
+      },
+    },
+  })
+
+  return response
+}
