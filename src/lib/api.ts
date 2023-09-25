@@ -58,3 +58,46 @@ export const getAllPublicUsers = async (): Promise<{ data: UserProfile[] }> => {
 
   return rawRes.json()
 }
+
+export const getPublicOwnerUser = async (
+  slug: string,
+): Promise<{ data: UserProfile }> => {
+  const rawRes = await fetch(`${BASEURL}/api/user/by-slug/${slug}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    next: {
+      tags: ['user-by-slug', slug],
+    },
+  })
+
+  return rawRes.json()
+}
+
+export const patchHit = async (slug: string): Promise<{ message: string }> => {
+  const rawRes = await fetch(`${BASEURL}/api/tracker/hit/${slug}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  return rawRes.json()
+}
+
+export const postSendQuestion = async (
+  slug: string,
+  question: string,
+): Promise<{ message: string }> => {
+  const rawRes = await fetch(`${BASEURL}/api/question/submit`, {
+    method: 'POST',
+    body: JSON.stringify({
+      slug: slug,
+      question: question,
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  return rawRes.json()
+}

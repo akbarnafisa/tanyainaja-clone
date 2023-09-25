@@ -5,9 +5,9 @@ import { nanoid } from 'nanoid'
 import {
   AddUserArgs,
   CreateSessionArgs,
-  // SubmitQuestionArgs,
+  SubmitQuestionArgs,
   // UpdateUserArgs,
-  // UpdateUserCounterArgs,
+  UpdateUserCounterArgs,
 } from './types'
 
 const notion = new Client({
@@ -183,4 +183,59 @@ export const simplifyResponseObject = <T>(properties): T => {
   }
 
   return simpleDataResponse as T
+}
+
+
+export const getUserBySlug = async (slug: string) => {
+  const response = await notion.databases.query({
+    database_id: DB_USER,
+    filter: {
+      property: 'slug',
+      rich_text: {
+        equals: slug,
+      },
+    },
+  })
+
+  return response
+}
+
+export const updateUserCounter = async (param: UpdateUserCounterArgs) => {
+  await notion.pages.update({
+    page_id: param.pageId,
+    properties: {
+      count: {
+        type: 'number',
+        number: param.count,
+      },
+    },
+  })
+}
+
+export const submitQuestion = async (param: SubmitQuestionArgs) => {
+  await notion.pages.create({
+    parent: {
+      database_id: DB_QUESTION,
+    },
+    properties: {
+      uuid: {
+        type: 'title',
+        title: [
+          {
+            type: 'text',
+            text: { content: nanoid() },
+          },
+        ],
+      },
+      ...submitRichTextProp('uid', param.uid),
+      ...submitRichTextProp('question', param.question),
+      submitted_date: {
+        type: 'date',
+        date: {
+          start: new Date().toISOString(),
+          time_zone: 'Asia/Jakarta',
+        },
+      },
+    },
+  })
 }
