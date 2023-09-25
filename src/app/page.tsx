@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -13,14 +12,15 @@ import {
   MagnifyingGlassIcon,
 } from "@radix-ui/react-icons";
 
-import imagehero from "~/public/images/pexels-rdne-stock-project-5756742.jpg";
-import logoImage from "~/public/logo/TanyaAja.svg";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import imagehero from "~/public/images/pexels-rdne-stock-project-5756742.jpg";
+import logoImage from "~/public/logo/TanyaAja.svg";
 
 export default function Home() {
   return (
