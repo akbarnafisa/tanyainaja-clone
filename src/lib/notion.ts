@@ -133,3 +133,54 @@ export const getSession = async (token: string) => {
 
   return response
 }
+
+export const getPublicUserList = async () => {
+  const response = await notion.databases.query({
+    database_id: DB_USER,
+    filter: {
+      property: 'public',
+      checkbox: {
+        equals: true,
+      },
+    },
+  })
+
+  return response
+}
+
+
+// @ts-ignore
+export const simplifyResponseObject = <T>(properties): T => {
+  const simpleDataResponse = {}
+  for (const [key, value] of Object.entries(properties)) {
+    // @ts-ignore
+    const type = value.type
+    // @ts-ignore
+    if (type === 'rich_text' || type === 'title') {
+      // @ts-ignore
+      simpleDataResponse[key] = value[type][0]?.text?.content || ''
+      // @ts-ignore
+    } else if (type === 'last_edited_time' || type === 'created_time') {
+      // @ts-ignore
+      simpleDataResponse[type] = value[type]
+      // @ts-ignore
+    } else if (type === 'number') {
+      // @ts-ignore
+      simpleDataResponse[key] = value[type]
+      // @ts-ignore
+    } else if (value[type].name) {
+      // @ts-ignore
+      simpleDataResponse[key] = value[type].name
+      // @ts-ignore
+    } else if (value[type].start) {
+      // @ts-ignore
+      simpleDataResponse[key] = value[type].start
+      // @ts-ignore
+    } else {
+      // @ts-ignore
+      simpleDataResponse[key] = value[type]
+    }
+  }
+
+  return simpleDataResponse as T
+}

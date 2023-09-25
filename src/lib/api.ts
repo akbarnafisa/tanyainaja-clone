@@ -1,5 +1,7 @@
 import { User } from 'firebase/auth'
 
+import { UserProfile } from './types'
+
 export const BASEURL = `${process.env.NEXT_PUBLIC_BASE_URL}`
 
 export const postAddUser = async (user: User): Promise<{ message: string }> => {
@@ -35,6 +37,22 @@ export const destroyActiveSession = async (
     headers: {
       'Content-Type': 'application/json',
       Authorization: token,
+    },
+  })
+
+  return rawRes.json()
+}
+
+
+export const getAllPublicUsers = async (): Promise<{ data: UserProfile[] }> => {
+  const rawRes = await fetch(`${BASEURL}/api/user/public-list`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    next: {
+      // TODO: try to comment it later
+      tags: ['public-users'],
     },
   })
 
