@@ -12,13 +12,18 @@ export async function POST(request: Request) {
   try {
     const userInNotion = await getUserByUid(res.uid)
 
-    if (token) {
-      await createSession({
-        token,
-        uid: res?.uid,
-        expire: addDays(new Date().toISOString(), 30).toISOString(),
-      })
+    if (!token) {
+      return NextResponse.json(
+        { message: 'Not Authenticated' },
+        { status: 401 },
+      )
     }
+
+    await createSession({
+      token,
+      uid: res?.uid,
+      expire: addDays(new Date().toISOString(), 30).toISOString(),
+    })
 
     if (userInNotion.results.length === 0) {
       await addUser(res)
