@@ -19,3 +19,13 @@ export interface UserProfile {
   count: number
   public: boolean
 }
+
+export interface UpdateUserCounterArgs {
+  pageId: string
+  count: number
+}
+
+export interface SubmitQuestionArgs {
+  uid: string
+  question: string
+}
