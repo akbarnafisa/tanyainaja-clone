@@ -29,3 +29,12 @@ export interface SubmitQuestionArgs {
   uid: string
   question: string
 }
+
+export interface Question {
+  uuid: string
+  uid: string
+  question: string
+  status: 'Done' | 'Not started'
+  submitted_date: string
+  public: boolean
+}

@@ -1,6 +1,6 @@
 import { User } from 'firebase/auth'
 
-import { UserProfile } from './types'
+import { Question, UserProfile } from './types'
 
 export const BASEURL = `${process.env.NEXT_PUBLIC_BASE_URL}`
 
@@ -99,5 +99,21 @@ export const postSendQuestion = async (
       'Content-Type': 'application/json',
     },
   })
+  return rawRes.json()
+}
+
+export const getQuestionDetail = async (
+  uuid: string,
+): Promise<{ data: Question[] }> => {
+  const rawRes = await fetch(`${BASEURL}/api/question/detail/${uuid}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    next: {
+      tags: ['q-by-uuid', uuid],
+    },
+  })
+
   return rawRes.json()
 }

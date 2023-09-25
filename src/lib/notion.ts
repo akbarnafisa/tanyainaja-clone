@@ -239,3 +239,17 @@ export const submitQuestion = async (param: SubmitQuestionArgs) => {
     },
   })
 }
+
+export const getQuestionsByUuid = async (uuid: string) => {
+  const response = await notion.databases.query({
+    database_id: DB_QUESTION,
+    filter: {
+      property: 'uuid',
+      title: {
+        equals: uuid,
+      },
+    },
+  })
+
+  return response
+}
