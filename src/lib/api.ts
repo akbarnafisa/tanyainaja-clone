@@ -117,3 +117,24 @@ export const getQuestionDetail = async (
 
   return rawRes.json()
 }
+export const getExistingUser = async (
+  user: User,
+): Promise<{ data: UserProfile }> => {
+  const token = await user.getIdToken()
+
+  const rawRes = await fetch(
+    `${BASEURL}/api/private/user/by-uuid/${user.uid}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
+      },
+      next: {
+        tags: ['user-by-uuid', user.uid],
+      },
+    },
+  )
+
+  return rawRes.json()
+}

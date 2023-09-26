@@ -38,3 +38,12 @@ export interface Question {
   submitted_date: string
   public: boolean
 }
+
+export interface UpdateUserArgs {
+  pageId: string
+  uid: string
+  name: string
+  slug: string
+  image: string
+  public: boolean
+}
