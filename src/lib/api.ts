@@ -1,6 +1,6 @@
 import { User } from 'firebase/auth'
 
-import { Question, UserProfile } from './types'
+import { Question, UpdateUserArgs, UserProfile } from './types'
 
 export const BASEURL = `${process.env.NEXT_PUBLIC_BASE_URL}`
 
@@ -117,6 +117,31 @@ export const getQuestionDetail = async (
 
   return rawRes.json()
 }
+
+export const checkTheSlugOwner = async (
+  user: User,
+  slug: string,
+): Promise<{ data: 'NOT_EXIST' | 'EXIST' | null }> => {
+  const token = await user.getIdToken()
+
+  const rawRes = await fetch(
+    `${BASEURL}/api/private/user/slug-checker/${slug}`,
+    {
+      method: 'POST',
+      body: JSON.stringify({
+        uid: user.uid,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
+      },
+    },
+  )
+
+  return rawRes.json()
+}
+
+
 export const getExistingUser = async (
   user: User,
 ): Promise<{ data: UserProfile }> => {
@@ -135,6 +160,30 @@ export const getExistingUser = async (
       },
     },
   )
+
+  return rawRes.json()
+}
+
+export const patchUpdateUser = async (
+  user: User,
+  param: Pick<UpdateUserArgs, 'name' | 'slug' | 'image' | 'public'>,
+): Promise<{ message: string }> => {
+  const token = await user.getIdToken()
+
+  const rawRes = await fetch(`${BASEURL}/api/private/user/update`, {
+    method: 'PATCH',
+    body: JSON.stringify({
+      uid: user.uid,
+      name: param.name,
+      slug: param.slug,
+      image: param.image,
+      public: param.public ?? false,
+    }),
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: token,
+    },
+  })
 
   return rawRes.json()
 }

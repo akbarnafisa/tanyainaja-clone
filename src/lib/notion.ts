@@ -6,6 +6,7 @@ import {
   AddUserArgs,
   CreateSessionArgs,
   SubmitQuestionArgs,
+  UpdateUserArgs,
   // UpdateUserArgs,
   UpdateUserCounterArgs,
 } from './types'
@@ -252,4 +253,29 @@ export const getQuestionsByUuid = async (uuid: string) => {
   })
 
   return response
+}
+
+
+export const updateUser = async (param: UpdateUserArgs) => {
+  const withImage = param.image ? submitRichTextProp('image', param.image) : {}
+  await notion.pages.update({
+    page_id: param.pageId,
+    properties: {
+      name: {
+        type: 'rich_text',
+        rich_text: [
+          {
+            type: 'text',
+            text: { content: param.name },
+          },
+        ],
+      },
+      public: {
+        type: 'checkbox',
+        checkbox: param.public,
+      },
+      ...submitRichTextProp('slug', param.slug),
+      ...withImage,
+    },
+  })
 }
