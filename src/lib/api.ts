@@ -187,3 +187,68 @@ export const patchUpdateUser = async (
 
   return rawRes.json()
 }
+
+
+export const getAllQuestions = async (
+  user: User,
+): Promise<{ data: Question[] }> => {
+  const token = await user.getIdToken()
+
+  const rawRes = await fetch(
+    `${BASEURL}/api/private/question/by-uid/${user.uid}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
+      },
+      next: {
+        tags: ['q-by-uid', user.uid],
+      },
+    },
+  )
+
+  return rawRes.json()
+}
+
+export const patchQuestionAsDone = async (
+  uuid: string,
+  user: User,
+): Promise<{ message: string }> => {
+  const token = await user.getIdToken()
+
+  const rawRes = await fetch(
+    `${BASEURL}/api/private/question/mark-done/${uuid}`,
+    {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
+      },
+    },
+  )
+  return rawRes.json()
+}
+
+export const patchQuestionAsPublicOrPrivate = async (
+  uuid: string,
+  access: 'PUBLIC' | 'PRIVATE',
+  user: User,
+): Promise<{ message: string }> => {
+  const token = await user.getIdToken()
+
+  const rawRes = await fetch(
+    `${BASEURL}/api/private/question/toggle-access/${uuid}`,
+    {
+      method: 'PATCH',
+      body: JSON.stringify({
+        access: access,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
+      },
+    },
+  )
+  return rawRes.json()
+}

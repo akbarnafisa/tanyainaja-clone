@@ -279,3 +279,56 @@ export const updateUser = async (param: UpdateUserArgs) => {
     },
   })
 }
+
+export const togglePublicAccessQuestion = async (
+  pageId: string,
+  status: boolean,
+) => {
+  await notion.pages.update({
+    page_id: pageId,
+    properties: {
+      public: {
+        type: 'checkbox',
+        checkbox: status,
+      },
+    },
+  })
+}
+
+export const getQuestionsByUid = async (uid: string) => {
+  const response = await notion.databases.query({
+    database_id: DB_QUESTION,
+    filter: {
+      and: [
+        {
+          property: 'uid',
+          rich_text: {
+            equals: uid,
+          },
+        },
+        {
+          property: 'status',
+          status: {
+            equals: 'Not started',
+          },
+        },
+      ],
+    },
+  })
+
+  return response
+}
+
+export const markStatusQuestionAsRead = async (pageId: string) => {
+  await notion.pages.update({
+    page_id: pageId,
+    properties: {
+      status: {
+        type: 'status',
+        status: {
+          name: 'Done',
+        },
+      },
+    },
+  })
+}
