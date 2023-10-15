@@ -8,7 +8,6 @@ export interface AddUserArgs {
 export interface CreateSessionArgs {
   uid: string
   token: string
-  expire: string
 }
 
 export interface UserProfile {
