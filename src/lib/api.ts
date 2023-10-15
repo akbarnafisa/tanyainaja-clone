@@ -51,7 +51,6 @@ export const getAllPublicUsers = async (): Promise<{ data: UserProfile[] }> => {
       'Content-Type': 'application/json',
     },
     next: {
-      // TODO: try to comment it later
       tags: ['public-users'],
     },
   })
