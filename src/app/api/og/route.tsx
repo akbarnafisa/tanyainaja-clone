@@ -77,7 +77,7 @@ function QuestionOg({ question }: { question: string }) {
     <div tw="flex p-10 flex-col w-full h-full items-center justify-center bg-white">
       <div tw="flex flex-col justify-center items-center font-extrabold text-3xl tracking-tight w-full">
         <p>
-        {question?.length > 500
+          {question?.length > 500
             ? `${question?.substring(0, 500)}...`
             : `${question}`}
         </p>
@@ -94,12 +94,12 @@ export async function GET(request: Request) {
   const slug = searchParams.get("slug");
   const question = searchParams.get("question");
 
-  if (type === "user") {
+  if (type === "user" && slug && slug !== "undefined") {
     return new ImageResponse(<UserOg slug={slug || ""} />, {
       width: 800,
       height: 400,
     });
-  } else if (type == "question") {
+  } else if (type === "question" && question && question !== "undefined") {
     return new ImageResponse(<QuestionOg question={question || ""} />, {
       width: 800,
       height: 600,
