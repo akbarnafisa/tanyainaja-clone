@@ -9,6 +9,7 @@ import { ShareButton } from '@/components/ShareButton'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { BASEURL, patchHit } from '@/lib/api'
+import { trackEvent } from '@/lib/firebase'
 import { Question } from '@/lib/types'
 import image404 from '~/public/images/404.png'
 
@@ -26,6 +27,7 @@ export const QuestionDetail = ({
     if (slug) {
       patchHit(slug)
     }
+    trackEvent('view question detail page')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

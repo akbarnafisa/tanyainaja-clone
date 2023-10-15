@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 import { getAllPublicUsers } from '@/lib/api'
+import { trackEvent } from '@/lib/firebase'
 import { UserProfile } from '@/lib/types'
 
 export default function PublicUserList() {
@@ -27,6 +28,7 @@ export default function PublicUserList() {
       setIsLoading(false)
     }
     fetchDataUsersFromDb()
+    trackEvent('view eksplor page')
   }, [])
 
   return (

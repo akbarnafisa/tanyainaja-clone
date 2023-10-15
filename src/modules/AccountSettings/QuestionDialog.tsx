@@ -19,6 +19,7 @@ import {
 import { useToast } from '@/components/ui/use-toast'
 import { patchQuestionAsDone, patchQuestionAsPublicOrPrivate } from '@/lib/api'
 import { Question, UserProfile } from '@/lib/types'
+import { trackEvent } from '@/lib/firebase'
 
 interface QuestionDialogProps {
   question: Question | null
@@ -40,6 +41,7 @@ export const QuestionDialog = ({
   const { toast } = useToast()
 
   const markAsDone = async (question: Question) => {
+    trackEvent('click mark as done')
     if (user) {
       try {
         setIsSubmitting(true)
@@ -66,6 +68,7 @@ export const QuestionDialog = ({
   }
 
   const togglePublicPrivate = async (question: Question) => {
+    trackEvent('click toggle public access')
     if (user) {
       try {
         setIsSubmitting(true)

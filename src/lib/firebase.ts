@@ -1,3 +1,4 @@
+import { getAnalytics, logEvent } from 'firebase/analytics'
 import { initializeApp } from 'firebase/app'
 import { getAuth, GoogleAuthProvider } from 'firebase/auth'
 
@@ -26,4 +27,13 @@ export const getGoogleAuthProvider = () => {
   })
 
   return provider
+}
+
+export const trackEvent = (
+  eventName: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  eventParam?: Record<string, any>,
+) => {
+  const analytics = getAnalytics()
+  logEvent(analytics, eventName, eventParam)
 }

@@ -31,7 +31,7 @@ import {
   getExistingUser,
   patchUpdateUser,
 } from "@/lib/api";
-import { getFirebaseAuth } from "@/lib/firebase";
+import { getFirebaseAuth, trackEvent } from "@/lib/firebase";
 
 const auth = getFirebaseAuth();
 
@@ -86,6 +86,11 @@ export default function Account() {
       public: false,
     },
   });
+
+  useEffect(() => {
+    trackEvent('view account setting page')
+  }, [])
+
   // @ts-ignore
   const watchSlug = form.watch("slug", false);
   // @ts-ignore
