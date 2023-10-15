@@ -29,7 +29,7 @@ export const metadata: Metadata = {
 export default function Login() {
   return (
     <main className="flex flex-col gap-6 items-center px-4 py-24">
-      <h1 className="text-3xl font-extrabold">Masuk atau Daftar</h1>
+      <h1 className="text-3xl font-extrabold">Login or Register</h1>
       <Card className="w-full md:w-[350px] min-h-[350px] flex flex-col justify-between items-center gap-6 py-4">
         <Link href="/" className="flex gap-2 items-center mt-4">
           <Image
@@ -43,17 +43,15 @@ export default function Login() {
         </Link>
 
         <LoginButtonWithRedirect />
-
         <p className="text-xs text-center px-4">
-          Dengan mengklik tombol di atas, berarti kamu setuju dengan{" "}
+          By clicking the button above, you agree to our{" "}
           <Link href="/ketentuan-layanan" className="underline">
-            Ketentuan Layanan
+            Terms of Service
           </Link>{" "}
-          dan{" "}
+          and{" "}
           <Link href="/kebijakan-privasi" className="underline">
-            Kebijakan Privasi
+            Privacy Policy
           </Link>{" "}
-          kami
         </p>
       </Card>
     </main>

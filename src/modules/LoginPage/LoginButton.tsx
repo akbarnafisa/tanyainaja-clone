@@ -1,19 +1,19 @@
-'use client'
+"use client";
 
-import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 
-import { signInWithPopup } from 'firebase/auth'
+import { signInWithPopup } from "firebase/auth";
 
-import { useAuth } from '@/components/FirebaseAuth'
-import { Button } from '@/components/ui/button'
-import { useToast } from '@/components/ui/use-toast'
-import { postAddUser } from '@/lib/api'
+import { useAuth } from "@/components/FirebaseAuth";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
+import { postAddUser } from "@/lib/api";
 import {
   getFirebaseAuth,
   getGoogleAuthProvider,
   trackEvent,
-} from '@/lib/firebase'
+} from "@/lib/firebase";
 
 const GoogleIcon = () => {
   return (
@@ -43,58 +43,58 @@ const GoogleIcon = () => {
         />
       </g>
     </svg>
-  )
-}
+  );
+};
 
-const auth = getFirebaseAuth()
+const auth = getFirebaseAuth();
 
 export const LoginButtonWithRedirect = () => {
-  const router = useRouter()
-  const { toast } = useToast()
-  const { isLogin, isLoading } = useAuth(auth)
+  const router = useRouter();
+  const { toast } = useToast();
+  const { isLogin, isLoading } = useAuth(auth);
 
   const handleLogin = () => {
-    trackEvent('click login button')
+    trackEvent("click login button");
     signInWithPopup(auth, getGoogleAuthProvider())
       .then(async (result) => {
-        const user = result.user
+        const user = result.user;
         toast({
-          title: 'Success Login',
+          title: "Success Login",
           description: `Berhasil login. Selamat datang ${user.displayName}!`,
-        })
+        });
 
-        await postAddUser(user)
+        await postAddUser(user);
 
         setTimeout(() => {
-          router.push('/account')
-        }, 500)
+          router.push("/account");
+        }, 500);
       })
       .catch((error) => {
         toast({
-          title: 'Gagal Login',
+          title: "Gagal Login",
           description: `Gagal login: ${error.message}`,
-          variant: 'destructive',
-        })
-      })
-  }
+          variant: "destructive",
+        });
+      });
+  };
 
   // Redirect back to /account --> if the session is already there
   useEffect(() => {
     if (!isLoading) {
       if (isLogin) {
-        router.push('/account')
+        router.push("/account");
       }
     }
-  }, [isLogin, isLoading, router])
+  }, [isLogin, isLoading, router]);
 
   useEffect(() => {
-    trackEvent('view login page')
-  }, [])
+    trackEvent("view login page");
+  }, []);
 
   return (
     <Button onClick={handleLogin} type="button">
       <GoogleIcon />
-      Lanjutkan dengan Akun Google
+      Continue with your Google Account
     </Button>
-  )
-}
+  );
+};

@@ -5,37 +5,37 @@ export function Footer() {
     <footer className="p-4 border-t">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 container mb-8">
         <div>
-          <h4 className="text-lg font-bold mb-2">Lebih banyak</h4>
+          <h4 className="text-lg font-bold mb-2">More</h4>
           <ul className="flex flex-col gap-2">
             <li>
               <Link href="/tentang" className="underline">
-                Tentang
+                About
               </Link>
             </li>
             <li>
               <Link href="/eksplor" className="underline">
-                Eksplor
+                Explore
               </Link>
             </li>
           </ul>
         </div>
         <div>
-          <h4 className="text-lg font-bold mb-2">Kebijakan</h4>
+          <h4 className="text-lg font-bold mb-2">Policy</h4>
           <ul className="flex flex-col gap-2">
             <li>
               <Link href="/ketentuan-layanan" className="underline">
-                Ketentuan Layanan
+                Terms of Service
               </Link>
             </li>
             <li>
               <Link href="/kebijakan-privasi" className="underline">
-                Kebijakan Privasi
+                Privacy Policy
               </Link>
             </li>
           </ul>
         </div>
         <div>
-          <h4 className="text-lg font-bold mb-2">Sumber daya</h4>
+          <h4 className="text-lg font-bold mb-2">Resources</h4>
           <ul className="flex flex-col gap-2">
             <li>
               {/* TODO: create betterstack account */}
@@ -55,7 +55,7 @@ export function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Laporkan Isu
+                Report an Issue
               </a>
             </li>
             <li>
@@ -65,13 +65,13 @@ export function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Dukung
+                Support
               </a>
             </li>
           </ul>
         </div>
         <div>
-          <h4 className="text-lg font-bold mb-2">Karya Lain</h4>
+          <h4 className="text-lg font-bold mb-2">Other Works</h4>
           <ul className="flex flex-col gap-2">
             <li>
               <a
@@ -99,7 +99,7 @@ export function Footer() {
       <div className="container">
         <div className="text-center">
           <p>
-            <small>© Sejak 2023, TanyaAja</small>
+            <small>© Since 2023, TanyaAja</small>
           </p>
           <p>
             <small>
