@@ -1,11 +1,11 @@
-import { ImageResponse } from 'next/server'
+import { ImageResponse } from "next/server";
 
-import { BASEURL } from '@/lib/api'
+import { BASEURL } from "@/lib/api";
 
 // App router includes @vercel/og.
 // No need to install it.
 
-export const runtime = 'edge'
+export const runtime = "edge";
 
 function LogoSvg({ width = 176, height = 100 }) {
   return (
@@ -25,14 +25,14 @@ function LogoSvg({ width = 176, height = 100 }) {
         fill="black"
       />
     </svg>
-  )
+  );
 }
 
 function DefaultOg() {
   return (
-    <div tw="flex p-8 flex-col w-full h-full items-center justify-between bg-white gap-4">
+    <div tw="flex p-8 flex-col w-full h-full items-center justify-between bg-white">
       <div></div>
-      <div tw="flex flex-col justify-center items-center font-extrabold text-6xl tracking-tight break-words w-full">
+      <div tw="flex flex-col justify-center items-center font-extrabold text-6xl tracking-tight w-full">
         <div tw="flex">
           <span>Tanyakan </span>
           <span tw="text-blue-500 ml-2 mr-2">apa aja</span>
@@ -46,16 +46,16 @@ function DefaultOg() {
         <LogoSvg />
       </div>
     </div>
-  )
+  );
 }
 
 function UserOg({ slug }: { slug: string }) {
   return (
-    <div tw="flex p-8 flex-col w-full h-full items-center justify-between bg-white gap-4">
+    <div tw="flex p-8 flex-col w-full h-full items-center justify-between bg-white">
       <div tw="flex text-blue-500 font-bold text-2xl">
-        {BASEURL.replace('https://www.', '')}/p/{slug}
+        {BASEURL.replace("https://www.", "")}/p/{slug}
       </div>
-      <div tw="flex flex-col justify-center items-center font-extrabold text-6xl tracking-tight break-words w-full">
+      <div tw="flex flex-col justify-center items-center font-extrabold text-6xl tracking-tight w-full">
         <div tw="flex">
           <span>Tanyakan </span>
           <span tw="text-blue-500 ml-2 mr-2">apa aja</span>
@@ -69,42 +69,45 @@ function UserOg({ slug }: { slug: string }) {
         <LogoSvg />
       </div>
     </div>
-  )
+  );
 }
 
 function QuestionOg({ question }: { question: string }) {
   return (
-    <div tw="flex p-8 flex-col w-full h-full items-center justify-between bg-white gap-4">
-      <div tw="flex items-center justify-start w-full">
-        <LogoSvg />
-      </div>
-      <div tw="flex flex-col justify-center items-center font-extrabold text-3xl tracking-tight break-words w-full">
-        <p>{question}</p>
+    <div tw="flex p-10 flex-col w-full h-full items-center justify-center bg-white">
+      <div tw="flex flex-col justify-center items-center font-extrabold text-3xl tracking-tight w-full">
+        <p>
+          {question.length > 500
+            ? `${question.substring(0, 500)}...`
+            : question}
+        </p>
       </div>
       <div></div>
     </div>
-  )
+  );
 }
 
 export async function GET(request: Request) {
-  const url = new URL(request.url)
-  const searchParams = url.searchParams
-  const type = searchParams.get('type')
-  const slug = searchParams.get('slug')
-  const question = searchParams.get('question')
+  const url = new URL(request.url);
+  const searchParams = url.searchParams;
+  const type = searchParams.get("type");
+  const slug = searchParams.get("slug");
+  const question = searchParams.get("question");
 
-  let layout = <div></div>
-
-  if (type === 'user') {
-    layout = <UserOg slug={slug || ''} />
-  } else if (type == 'question') {
-    layout = <QuestionOg question={question || ''} />
-  } else {
-    layout = <DefaultOg />
+  if (type === "user") {
+    return new ImageResponse(<UserOg slug={slug || ""} />, {
+      width: 800,
+      height: 400,
+    });
+  } else if (type == "question") {
+    return new ImageResponse(<QuestionOg question={question || ""} />, {
+      width: 800,
+      height: 600,
+    });
   }
 
-  return new ImageResponse(layout, {
+  return new ImageResponse(<DefaultOg />, {
     width: 800,
-    height: type === 'question' ? 600 : 400,
-  })
+    height: 400,
+  });
 }

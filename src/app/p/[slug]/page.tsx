@@ -16,9 +16,17 @@ export async function generateMetadata({
   const slug = params.slug
   const ownerData = await getPublicOwnerUser(slug as string)
 
+  const title = `Lempar pertanyaan anonim ke ${ownerData?.data?.name} lewat TanyaAja`
+  const description = `Mulai bertanya anonim ke ${ownerData?.data?.name} melalui aplikasi TanyaAja. Mudah, gratis dan terjamin rahasia.`
+  const url = `${BASEURL}/p/${ownerData?.data?.slug}`
+  const ogImage = `${BASEURL}/api/og?type=user&slug=${ownerData?.data?.slug}`
+
   return {
-    title: `Tanyakan apa aja ke ${ownerData?.data?.name} dengan anonim | TanyaAja`,
-    description: `Tanyakan apa saja ke ${ownerData?.data?.name} dengan anonim`,
+    title,
+    description,
+    alternates: {
+      canonical: url,
+    },
     metadataBase: new URL(BASEURL),
     robots: {
       index: true,
@@ -26,23 +34,24 @@ export async function generateMetadata({
     },
     openGraph: {
       siteName: 'TanyaAja.in',
-      description: `Tanyakan apa saja ke ${ownerData?.data?.name} dengan anonim`,
-      url: `${BASEURL}/p/${ownerData?.data?.slug}`,
-      title: `Tanyakan apa aja ke ${ownerData?.data?.name} dengan anonim`,
+      description,
+      title,
+      url: url,
       images: [
         {
-          url: `${BASEURL}/api/og?type=user&slug=${ownerData?.data?.slug}`,
+          url: ogImage,
         },
       ],
     },
     twitter: {
+      card: 'summary_large_image',
       site: 'TanyaAja.in',
-      description: `Tanyakan apa saja ke ${ownerData?.data?.name} dengan anonim`,
+      description,
+      title,
       creator: '@Maz_Ipan',
-      title: `Tanyakan apa aja ke ${ownerData?.data?.name} dengan anonim`,
       images: [
         {
-          url: `${BASEURL}/api/og?type=user&slug=${ownerData?.data?.slug}`,
+          url: ogImage,
         },
       ],
     },
@@ -74,7 +83,7 @@ export default async function PublicPage({
             Tanya ke {owner?.data?.name}
           </h1>
 
-          {owner && owner?.data ? <QuestionForm owner={owner.data} /> : null}
+          {owner && owner?.data ? <QuestionForm owner={owner?.data} /> : null}
 
           <LinkAds />
         </>

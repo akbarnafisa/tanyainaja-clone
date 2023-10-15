@@ -13,14 +13,16 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Tanya secara anonim | TanyaAja",
-  description: "Kumpulkan berbagai pertanyaan dari siapa saja secara anonim",
+  description:
+    "Kumpulkan berbagai pertanyaan dari siapa saja secara anonim melaui aplikasi TanyaAja. Mudah, gratis dan terjamin rahasia.",
   metadataBase: new URL(BASEURL),
   robots: {
     index: true,
     follow: true,
   },
   openGraph: {
-    description: "Kumpulkan berbagai pertanyaan dari siapa saja secara anonim",
+    description:
+      "Kumpulkan berbagai pertanyaan dari siapa saja secara anonim melaui aplikasi TanyaAja. Mudah, gratis dan terjamin rahasia.",
     siteName: "TanyaAja.in",
     title: "Tanya secara anonim | TanyaAja",
     url: BASEURL,
@@ -31,8 +33,10 @@ export const metadata: Metadata = {
     ],
   },
   twitter: {
+    card: "summary_large_image",
     title: "Tanya secara anonim | TanyaAja",
-    description: "Kumpulkan berbagai pertanyaan dari siapa saja secara anonim",
+    description:
+      "Kumpulkan berbagai pertanyaan dari siapa saja secara anonim melaui aplikasi TanyaAja. Mudah, gratis dan terjamin rahasia.",
     creator: "@Maz_Ipan",
     site: "TanyaAja.in",
     images: [
@@ -49,7 +53,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    // suppressHydrationWarning -> https://stackoverflow.com/questions/73451295/how-to-solve-react-hydration-error-in-next
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
