@@ -38,6 +38,17 @@ export function Footer() {
           <h4 className="text-lg font-bold mb-2">Sumber daya</h4>
           <ul className="flex flex-col gap-2">
             <li>
+              {/* TODO: create betterstack account */}
+              <a
+                href="https://tanyaaja.betteruptime.com/"
+                className="underline"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Status Server
+              </a>
+            </li>
+            <li>
               <a
                 href="https://github.com/mazipan/tanyaaja/issues/new"
                 className="underline"
