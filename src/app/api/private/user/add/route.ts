@@ -36,6 +36,11 @@ export async function POST(request: Request) {
           uid: res?.uid,
         });
       }
+    } else {
+      await createSession({
+        token,
+        uid: res?.uid,
+      });
     }
 
     if (userInNotion.results.length === 0) {
