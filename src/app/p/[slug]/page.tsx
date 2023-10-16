@@ -1,25 +1,25 @@
-import { Metadata } from 'next'
-import { notFound } from 'next/navigation'
+import { Metadata } from "next";
+import { notFound } from "next/navigation";
 
-import { ProfileAvatar } from '@/components/ProfileAvatar'
-import { BASEURL, getPublicOwnerUser } from '@/lib/api'
-import { LinkAds } from '@/modules/PublicQuestionPage/LinkAds'
-import { QuestionForm } from '@/modules/PublicQuestionPage/QuestionForm'
+import { ProfileAvatar } from "@/components/ProfileAvatar";
+import { BASEURL, getPublicOwnerUser } from "@/lib/api";
+import { LinkAds } from "@/modules/PublicQuestionPage/LinkAds";
+import { QuestionForm } from "@/modules/PublicQuestionPage/QuestionForm";
 
 type PublicPageProps = {
-  params: { slug: string }
-}
+  params: { slug: string };
+};
 
 export async function generateMetadata({
   params,
 }: PublicPageProps): Promise<Metadata> {
-  const slug = params.slug
-  const ownerData = await getPublicOwnerUser(slug as string)
+  const slug = params.slug;
+  const ownerData = await getPublicOwnerUser(slug as string);
 
-  const title = `Lempar pertanyaan anonim ke ${ownerData?.data?.name} lewat TanyaAja`
-  const description = `Mulai bertanya anonim ke ${ownerData?.data?.name} melalui aplikasi TanyaAja. Mudah, gratis dan terjamin rahasia.`
-  const url = `${BASEURL}/p/${ownerData?.data?.slug}`
-  const ogImage = `${BASEURL}/api/og?type=user&slug=${ownerData?.data?.slug}`
+  const title = `Lempar pertanyaan anonim ke ${ownerData?.data?.name} lewat TanyaAja`;
+  const description = `Mulai bertanya anonim ke ${ownerData?.data?.name} melalui aplikasi TanyaAja. Mudah, gratis dan terjamin rahasia.`;
+  const url = `${BASEURL}/p/${ownerData?.data?.slug}`;
+  const ogImage = `${BASEURL}/api/og?type=user&slug=${ownerData?.data?.slug}`;
 
   return {
     title,
@@ -33,7 +33,7 @@ export async function generateMetadata({
       follow: true,
     },
     openGraph: {
-      siteName: 'TanyaAja.in',
+      siteName: "TanyaAja.in",
       description,
       title,
       url: url,
@@ -44,29 +44,29 @@ export async function generateMetadata({
       ],
     },
     twitter: {
-      card: 'summary_large_image',
-      site: 'TanyaAja.in',
+      card: "summary_large_image",
+      site: "TanyaAja.in",
       description,
       title,
-      creator: '@Maz_Ipan',
+      creator: "@Maz_Ipan",
       images: [
         {
           url: ogImage,
         },
       ],
     },
-  }
+  };
 }
 
 export default async function PublicPage({
   params: { slug },
 }: PublicPageProps) {
-  const ownerData = getPublicOwnerUser(slug as string)
+  const ownerData = getPublicOwnerUser(slug as string);
 
-  const [owner] = await Promise.all([ownerData])
+  const [owner] = await Promise.all([ownerData]);
 
   if (!owner?.data) {
-    notFound()
+    notFound();
   }
 
   return (
@@ -80,7 +80,7 @@ export default async function PublicPage({
           />
 
           <h1 className="text-3xl font-extrabold text-center">
-            Tanya ke {owner?.data?.name}
+            Ask {owner?.data?.name}
           </h1>
 
           {owner && owner?.data ? <QuestionForm owner={owner?.data} /> : null}
@@ -89,5 +89,5 @@ export default async function PublicPage({
         </>
       ) : null}
     </main>
-  )
+  );
 }

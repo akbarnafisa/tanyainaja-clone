@@ -98,10 +98,10 @@ export function Header() {
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem className="cursor-pointer py-3" asChild>
-                    <Link href="/account">Daftar Pertanyaan</Link>
+                    <Link href="/account">Questions</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem className="cursor-pointer py-3" asChild>
-                    <Link href="/account/settings">Setelan Akun</Link>
+                    <Link href="/account/settings">Settings</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={handleLogout}

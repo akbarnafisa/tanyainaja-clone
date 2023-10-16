@@ -1,28 +1,28 @@
-import { Link2Icon } from '@radix-ui/react-icons'
+import { Link2Icon } from "@radix-ui/react-icons";
 
-import { CopyButton } from '@/components/CopyButton'
-import { Card } from '@/components/ui/card'
-import { BASEURL } from '@/lib/api'
-import { UserProfile } from '@/lib/types'
+import { CopyButton } from "@/components/CopyButton";
+import { Card } from "@/components/ui/card";
+import { BASEURL } from "@/lib/api";
+import { UserProfile } from "@/lib/types";
 
 export const StatisticPanel = ({ owner }: { owner?: UserProfile | null }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       <Card className="relative p-4 flex flex-col justify-between">
         <h3 className="font-semibold leading-none tracking-tight">
-          Total kunjungan
+          Total visits
         </h3>
         <p className="text-4xl font-extrabold">
-          {new Intl.NumberFormat('id-ID').format(owner?.count || 0)}
+          {new Intl.NumberFormat("id-ID").format(owner?.count || 0)}
         </p>
         <small className="font-light text-xs">
-          Jumlah orang yang mengunjungi laman publik
+          Number of people visiting public pages
         </small>
       </Card>
 
       <Card className="relative p-4 flex flex-col justify-between">
         <h3 className="font-semibold leading-none tracking-tight">
-          Laman Publik
+          Public Page
         </h3>
         <div className="flex gap-2 items-center mt-4">
           <Link2Icon />
@@ -40,5 +40,5 @@ export const StatisticPanel = ({ owner }: { owner?: UserProfile | null }) => {
         </div>
       </Card>
     </div>
-  )
-}
+  );
+};

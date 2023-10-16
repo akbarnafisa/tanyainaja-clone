@@ -42,7 +42,7 @@ export function CopyButton({
           <CopyIcon className="h-4 w-4" />
         )}
         {withLabel ? (
-          <>{isCopied ? <span>Tersalin</span> : <span>Salin</span>}</>
+          <>{isCopied ? <span>Copied</span> : <span>Copy</span>}</>
         ) : null}
       </Button>
     </div>

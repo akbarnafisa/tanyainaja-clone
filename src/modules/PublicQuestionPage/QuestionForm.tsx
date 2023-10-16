@@ -1,15 +1,15 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { LockClosedIcon, PaperPlaneIcon } from '@radix-ui/react-icons'
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { LockClosedIcon, PaperPlaneIcon } from "@radix-ui/react-icons";
 
-import { zodResolver } from '@hookform/resolvers/zod'
+import { zodResolver } from "@hookform/resolvers/zod";
 // @ts-ignore
-import * as z from 'zod'
+import * as z from "zod";
 
-import { ShareButton } from '@/components/ShareButton'
-import { Button } from '@/components/ui/button'
+import { ShareButton } from "@/components/ShareButton";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -18,63 +18,63 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
-import { Textarea } from '@/components/ui/textarea'
-import { useToast } from '@/components/ui/use-toast'
-import { BASEURL, patchHit, postSendQuestion } from '@/lib/api'
-import { UserProfile } from '@/lib/types'
-import { trackEvent } from '@/lib/firebase'
+} from "@/components/ui/form";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/components/ui/use-toast";
+import { BASEURL, patchHit, postSendQuestion } from "@/lib/api";
+import { trackEvent } from "@/lib/firebase";
+import { UserProfile } from "@/lib/types";
 
 const formSchema = z.object({
   q: z
     .string()
     .min(2, {
-      message: 'Pertanyaan butuh minimal 2 karakter',
+      message: "Questions require a minimum of 2 characters",
     })
     .max(1000, {
-      message: 'Pertanyaan hanya bisa maksimal 1000 karakter',
+      message: "Questions can only be a maximum of 1000 characters",
     }),
-})
+});
 
-type FormValues = z.infer<typeof formSchema>
+type FormValues = z.infer<typeof formSchema>;
 
 export function QuestionForm({ owner }: { owner: UserProfile }) {
-  const { toast } = useToast()
-  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      q: '',
+      q: "",
     },
-  })
+  });
 
   async function onSubmit(data: FormValues) {
-    trackEvent('click submit new question')
-    setIsLoading(true)
+    trackEvent("click submit new question");
+    setIsLoading(true);
     try {
-      await postSendQuestion(owner?.slug || '', data.q)
-      setIsLoading(false)
+      await postSendQuestion(owner?.slug || "", data.q);
+      setIsLoading(false);
       toast({
-        title: 'Pesan terkirim',
-        description: `Berhasil mengirimkan pertanyaan ke ${owner?.name}!`,
-      })
+        title: "Message sent",
+        description: `Successfully submitted inquiry to ${owner?.name}!`,
+      });
     } catch (error) {
-      setIsLoading(false)
+      setIsLoading(false);
       toast({
-        title: 'Pesan gagal terkirim',
-        description: `Gagal mengirimkan pertanyaan ke ${owner?.name}, coba sesaat lagi!`,
-      })
+        title: "Message failed to send",
+        description: `Failed to send question to ${owner?.name}, try again later!`,
+      });
     }
   }
 
   useEffect(() => {
     if (owner && owner?.slug) {
-      patchHit(owner.slug)
+      patchHit(owner.slug);
     }
-    trackEvent('view public page')
+    trackEvent("view public page");
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
 
   return (
     <>
@@ -88,16 +88,16 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
             name="q"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Pertanyaan</FormLabel>
+                <FormLabel>Question</FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder={`Tulis pertanyaan yang ingin disampaikan ke ${owner?.name}`}
+                    placeholder={`Write the question you want to submit to ${owner?.name}`}
                     rows={7}
                     {...field}
                   />
                 </FormControl>
                 <FormDescription className="flex items-center gap-2">
-                  <LockClosedIcon /> Pertanyaanmu akan disampaikan secara anonim
+                  <LockClosedIcon /> Your question will be submitted anonymously
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -106,7 +106,7 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
           <div className="flex flex-wrap justify-between gap-2">
             <Button type="submit" disabled={isLoading}>
               <PaperPlaneIcon className="mr-2 h-4 w-4" />
-              {isLoading ? 'Sedang mengirim...' : 'Kirim pertanyaan'}
+              {isLoading ? "Sending question..." : "Send question"}
             </Button>
 
             {owner && owner?.slug ? (
@@ -120,5 +120,5 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
         </form>
       </Form>
     </>
-  )
+  );
 }

@@ -15,7 +15,7 @@ export const QuestionLoader = ({ index }: { index: number }) => {
   return (
     <Card key={index} className="min-h-[200px] flex flex-col">
       <CardHeader>
-        <CardTitle className="text-2xl">Memuat Pertanyaan #{index}</CardTitle>
+        <CardTitle className="text-2xl">Loading Question #{index}</CardTitle>
         <div className="flex gap-1 items-center">
           <Skeleton className="h-2 w-[180px]" />
         </div>
@@ -34,7 +34,7 @@ export const QuestionLoader = ({ index }: { index: number }) => {
         <RedirectButton url={`${BASEURL}/account`} />
         <CopyButton text={``} withLabel />
         <Button type="button" disabled>
-          Selengkapnya
+          More
         </Button>
       </CardFooter>
     </Card>
