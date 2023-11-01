@@ -46,3 +46,15 @@ export interface UpdateUserArgs {
   image: string
   public: boolean
 }
+
+export type ClassMap = {
+  id: string
+  class: string
+  cssNative?: string
+}
+
+export interface IResponseGetQuestionPagination {
+  data: Question[]
+  hasMore: boolean
+  next: string
+}
