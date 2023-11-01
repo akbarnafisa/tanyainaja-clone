@@ -166,7 +166,7 @@ export const getExistingUser = async (
 
 export const patchUpdateUser = async (
   user: User,
-  param: Pick<UpdateUserArgs, 'name' | 'slug' | 'image' | 'public'>,
+  param: Pick<UpdateUserArgs, 'name' | 'slug' | 'image' | 'public' | 'x_username'>,
 ): Promise<{ message: string }> => {
   const token = await user.getIdToken()
 

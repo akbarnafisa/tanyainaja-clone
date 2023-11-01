@@ -6,6 +6,22 @@ import { twMerge } from "tailwind-merge";
 import { ClassMap, IResponseGetQuestionPagination } from "./types";
 
 export const DEFAULT_AVATAR = 'https://api.dicebear.com/7.x/fun-emoji/svg'
+export const RANDOM_AVATARS = [
+  DEFAULT_AVATAR,
+  'https://api.dicebear.com/7.x/avataaars-neutral/svg',
+  'https://api.dicebear.com/7.x/adventurer/svg',
+  'https://api.dicebear.com/7.x/avataaars/svg',
+  'https://api.dicebear.com/7.x/adventurer-neutral/svg',
+  'https://api.dicebear.com/7.x/big-ears/svg',
+  'https://api.dicebear.com/7.x/big-ears-neutral/svg',
+  'https://api.dicebear.com/7.x/bottts/svg',
+  'https://api.dicebear.com/7.x/bottts-neutral/svg',
+  'https://api.dicebear.com/7.x/lorelei/svg',
+  'https://api.dicebear.com/7.x/notionists/svg',
+  'https://api.dicebear.com/7.x/open-peeps/svg',
+  'https://api.dicebear.com/7.x/pixel-art/svg',
+  'https://api.dicebear.com/7.x/thumbs/svg',
+]
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -24,6 +40,12 @@ export async function copyTextToClipboard(text: string) {
   } else {
     return document.execCommand("copy", true, text);
   }
+}
+
+
+export const randomizeAvatar = () => {
+  const randomIndex = Math.floor(Math.random() * RANDOM_AVATARS.length)
+  return RANDOM_AVATARS[randomIndex]
 }
 
 export const GRADIENTS: ClassMap[] = [

@@ -45,6 +45,7 @@ export interface UpdateUserArgs {
   slug: string
   image: string
   public: boolean
+  x_username?: string
 }
 
 export type ClassMap = {
