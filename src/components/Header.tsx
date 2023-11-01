@@ -5,9 +5,20 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { signOut } from "firebase/auth";
+import {
+  BellIcon,
+  Camera,
+  Loader2,
+  LogOut,
+  MessageCircle,
+  MoveUpRight,
+  Wrench,
+} from "lucide-react";
 
 import { destroyActiveSession } from "@/lib/api";
 import { getFirebaseAuth } from "@/lib/firebase";
+import { DEFAULT_AVATAR } from "@/lib/utils";
+import { useOwner } from "@/queries/useQueries";
 import logoSvg from "~/public/logo/TanyaAja.svg";
 
 import { useAuth } from "./FirebaseAuth";
@@ -30,6 +41,10 @@ export function Header() {
   const router = useRouter();
   const { toast } = useToast();
   const { isLogin, user, isLoading } = useAuth(auth);
+  // @ts-ignore
+  const { data: dataOwner, isLoading: isLoadingOwner } = useOwner(user, {
+    enabled: !isLoading && isLogin && !!user,
+  });
 
   const handleLogout = async () => {
     if (user) {
@@ -58,7 +73,7 @@ export function Header() {
   };
 
   return (
-    <header className="flex justify-between items-center p-4 border-b">
+    <header className="container flex justify-between items-center p-4 border-b">
       <Link href="/" className="flex gap-2 items-center">
         <Image
           src={logoSvg}
@@ -72,19 +87,31 @@ export function Header() {
       <div className="flex items-center gap-2">
         {!isLoading ? (
           <>
-            {isLogin && user && user.displayName && user.photoURL ? (
+            {isLogin && user && user.displayName ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Avatar>
-                    <AvatarImage src={user?.photoURL} alt={user?.displayName} />
-                    <AvatarFallback>
-                      {user?.displayName
-                        ?.split(" ")
-                        .map((n: string) => n[0])
-                        .join("")
-                        .substring(2, 0)
-                        .toUpperCase()}
-                    </AvatarFallback>
+                    {!isLoadingOwner && dataOwner && dataOwner.data && (
+                      <>
+                        <AvatarImage
+                          src={
+                            dataOwner?.data?.image ||
+                            user?.photoURL ||
+                            DEFAULT_AVATAR
+                          }
+                          alt={user?.displayName}
+                        />
+
+                        <AvatarFallback>
+                          {user?.displayName
+                            ?.split(" ")
+                            .map((n: string) => n[0])
+                            .join("")
+                            .substring(2, 0)
+                            .toUpperCase()}
+                        </AvatarFallback>
+                      </>
+                    )}
                   </Avatar>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
@@ -97,16 +124,48 @@ export function Header() {
                     </div>
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
+                  {!isLoadingOwner && dataOwner && (
+                    <DropdownMenuItem className="cursor-pointer py-3" asChild>
+                      <Link
+                        href={`/p/${dataOwner?.data?.slug}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <MoveUpRight className="h-4 w-4 mr-2" />
+                        Laman Publik
+                      </Link>
+                    </DropdownMenuItem>
+                  )}
                   <DropdownMenuItem className="cursor-pointer py-3" asChild>
-                    <Link href="/account">Questions</Link>
+                    <Link href="/account">
+                      <MessageCircle className="h-4 w-4 mr-2" />
+                      Daftar Pertanyaan
+                    </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem className="cursor-pointer py-3" asChild>
-                    <Link href="/account/settings">Settings</Link>
+                    <Link href="/account/settings">
+                      <Wrench className="h-4 w-4 mr-2" />
+                      Setelan Akun
+                    </Link>
                   </DropdownMenuItem>
+                  <DropdownMenuItem className="cursor-pointer py-3" asChild>
+                    <Link href="/account/settings/og-image">
+                      <Camera className="h-4 w-4 mr-2" />
+                      Setelan OG Image
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="cursor-pointer py-3" asChild>
+                    <Link href="/account/settings/notification">
+                      <BellIcon className="h-4 w-4 mr-2" />
+                      Setelan Notifikasi
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
                   <DropdownMenuItem
                     onClick={handleLogout}
                     className="cursor-pointer py-3"
                   >
+                    <LogOut className="h-4 w-4 mr-2" />
                     Logout
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -117,7 +176,9 @@ export function Header() {
               </Button>
             )}
           </>
-        ) : null}
+        ) : (
+          <Loader2 className="animate-spin" />
+        )}
 
         <ThemeSwitcher />
       </div>
