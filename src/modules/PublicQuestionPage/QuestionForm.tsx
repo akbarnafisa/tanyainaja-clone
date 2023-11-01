@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { LockClosedIcon, PaperPlaneIcon } from "@radix-ui/react-icons";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-// @ts-ignore
-import * as z from "zod";
+import { valibotResolver } from "@hookform/resolvers/valibot";
+import { maxLength, minLength, object, type Output, string } from "valibot";
 
+// @ts-ignore
 import { ShareButton } from "@/components/ShareButton";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,25 +25,21 @@ import { BASEURL, patchHit, postSendQuestion } from "@/lib/api";
 import { trackEvent } from "@/lib/firebase";
 import { UserProfile } from "@/lib/types";
 
-const formSchema = z.object({
-  q: z
-    .string()
-    .min(2, {
-      message: "Questions require a minimum of 2 characters",
-    })
-    .max(1000, {
-      message: "Questions can only be a maximum of 1000 characters",
-    }),
+const schema = object({
+  q: string("Pertanyaan perlu disi terlebih dahulu.", [
+    minLength(2, "Pertanyaan butuh paling tidak 2 karakter."),
+    maxLength(500, "Pertanyaan hanya bisa maksimal 1000 karakter."),
+  ]),
 });
 
-type FormValues = z.infer<typeof formSchema>;
+type FormValues = Output<typeof schema>;
 
 export function QuestionForm({ owner }: { owner: UserProfile }) {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: valibotResolver(schema),
     defaultValues: {
       q: "",
     },
@@ -56,14 +52,14 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
       await postSendQuestion(owner?.slug || "", data.q);
       setIsLoading(false);
       toast({
-        title: "Message sent",
-        description: `Successfully submitted inquiry to ${owner?.name}!`,
+        title: "Pesan terkirim",
+        description: `Berhasil mengirimkan pertanyaan ke ${owner?.name}!`,
       });
     } catch (error) {
       setIsLoading(false);
       toast({
-        title: "Message failed to send",
-        description: `Failed to send question to ${owner?.name}, try again later!`,
+        title: "Pesan gagal terkirim",
+        description: `Gagal mengirimkan pertanyaan ke ${owner?.name}, coba sesaat lagi!`,
       });
     }
   }
@@ -72,8 +68,11 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
     if (owner && owner?.slug) {
       patchHit(owner.slug);
     }
-    trackEvent("view public page");
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    trackEvent("view public page");
   }, []);
 
   return (
@@ -88,16 +87,16 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
             name="q"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Question</FormLabel>
+                <FormLabel>Pertanyaan</FormLabel>
                 <FormControl>
                   <Textarea
-                    placeholder={`Write the question you want to submit to ${owner?.name}`}
+                    placeholder={`Tulis pertanyaan yang ingin disampaikan ke ${owner?.name}`}
                     rows={7}
                     {...field}
                   />
                 </FormControl>
                 <FormDescription className="flex items-center gap-2">
-                  <LockClosedIcon /> Your question will be submitted anonymously
+                  <LockClosedIcon /> Pertanyaanmu akan disampaikan secara anonim
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -106,7 +105,7 @@ export function QuestionForm({ owner }: { owner: UserProfile }) {
           <div className="flex flex-wrap justify-between gap-2">
             <Button type="submit" disabled={isLoading}>
               <PaperPlaneIcon className="mr-2 h-4 w-4" />
-              {isLoading ? "Sending question..." : "Send question"}
+              {isLoading ? "Sedang mengirim..." : "Kirim pertanyaan"}
             </Button>
 
             {owner && owner?.slug ? (
