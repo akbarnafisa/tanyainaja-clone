@@ -12,6 +12,7 @@ import { BASEURL } from "@/lib/api";
 import QueryProvider from "@/queries/QueryProvider";
 
 import "./globals.css";
+import Script from "next/script";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -71,6 +72,31 @@ export default function RootLayout({
           </ThemeProvider>
           <ReactQueryDevtools initialIsOpen={false} />
         </QueryProvider>
+        <Script id="sw-registration">
+          {`
+            const registerServiceWorker = async () => {
+            if ("serviceWorker" in navigator) {
+              try {
+                const registration = await navigator
+                  .serviceWorker
+                  .register("/service-worker.js", {
+                    scope: "/",
+                  });
+                if (registration.installing) {
+                  console.debug("🟠 Installing service worker...");
+                } else if (registration.waiting) {
+                  console.debug("🟢 Service worker installed!");
+                } else if (registration.active) {
+                  console.debug("🔵 Service worker active!");
+                }
+              } catch (error) {
+                console.error('🔴 SW registration failed.', error);
+              }
+            }
+          }
+          registerServiceWorker();
+        `}
+        </Script>
       </body>
     </html>
   );

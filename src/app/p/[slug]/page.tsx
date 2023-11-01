@@ -1,8 +1,10 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { Twitter } from "lucide-react";
+
 import { ProfileAvatar } from "@/components/ProfileAvatar";
-import { BASEURL, getPublicOwnerUser } from "@/lib/api";
+import { BASEURL, getPublicCustomOg, getPublicOwnerUser } from "@/lib/api";
 import { LinkAds } from "@/modules/PublicQuestionPage/LinkAds";
 import { QuestionForm } from "@/modules/PublicQuestionPage/QuestionForm";
 
@@ -14,12 +16,21 @@ export async function generateMetadata({
   params,
 }: PublicPageProps): Promise<Metadata> {
   const slug = params.slug;
-  const ownerData = await getPublicOwnerUser(slug as string);
+  const owner = await getPublicOwnerUser(slug as string);
+  const customOg = await getPublicCustomOg(slug as string);
 
-  const title = `Lempar pertanyaan anonim ke ${ownerData?.data?.name} lewat TanyaAja`;
-  const description = `Mulai bertanya anonim ke ${ownerData?.data?.name} melalui aplikasi TanyaAja. Mudah, gratis dan terjamin rahasia.`;
-  const url = `${BASEURL}/p/${ownerData?.data?.slug}`;
-  const ogImage = `${BASEURL}/api/og?type=user&slug=${ownerData?.data?.slug}`;
+  const title = `Lempar pertanyaan anonim ke ${owner?.data?.name} lewat TanyaAja`;
+  const description = `Mulai bertanya anonim ke ${owner?.data?.name} melalui aplikasi TanyaAja. Mudah, gratis dan terjamin rahasia.`;
+  const url = `${BASEURL}/p/${owner?.data?.slug}`;
+
+  let ogImage = "";
+
+  if (customOg && customOg?.data) {
+    // -- mode simple
+    ogImage = `${BASEURL}/api/og?type=custom-user&slug=${owner?.data?.slug}&name=${owner?.data?.name}&theme=${customOg?.data?.theme}&text=${customOg?.data?.simple_text}`;
+  } else {
+    ogImage = `${BASEURL}/api/og?type=user&slug=${owner?.data?.slug}&name=${owner?.data?.name}`;
+  }
 
   return {
     title,
@@ -80,8 +91,20 @@ export default async function PublicPage({
           />
 
           <h1 className="text-3xl font-extrabold text-center">
-            Ask {owner?.data?.name}
+            Tanya ke {owner?.data?.name}
           </h1>
+
+          {owner?.data?.x_username && (
+            <a
+              className="flex items-center gap-1 underline"
+              href={`https://x.com/${owner.data.x_username}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Twitter className="h-4 w-4" />
+              {owner.data.x_username}
+            </a>
+          )}
 
           {owner && owner?.data ? <QuestionForm owner={owner?.data} /> : null}
 

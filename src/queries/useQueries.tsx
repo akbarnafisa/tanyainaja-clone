@@ -8,8 +8,8 @@ import {
 } from "@tanstack/react-query";
 import { User } from "firebase/auth";
 
-import { getAllQuestionsWithPagination, getExistingUser } from "@/lib/api";
-import { IResponseGetQuestionPagination, UserProfile } from "@/lib/types";
+import { getAllQuestionsWithPagination, getExistingCustomOg, getExistingUser } from "@/lib/api";
+import { CustomOg, IResponseGetQuestionPagination, UserProfile } from "@/lib/types";
 
 export const useQuestionListPagination = (
   user: User,
@@ -45,6 +45,17 @@ export const useOwner = (
   return useQuery<{ data: UserProfile }, Error>(
     ['/owner', user?.uid],
     async (): Promise<{ data: UserProfile }> => getExistingUser(user),
+    config,
+  )
+}
+
+export const useCustomOgByUser = (
+  user: User,
+  config?: UseQueryOptions<{ data: CustomOg[] }, Error>,
+): UseQueryResult<{ data: CustomOg[] }, Error> => {
+  return useQuery<{ data: CustomOg[] }, Error>(
+    ['/user-custom-og', user?.uid],
+    async (): Promise<{ data: CustomOg[] }> => getExistingCustomOg(user),
     config,
   )
 }

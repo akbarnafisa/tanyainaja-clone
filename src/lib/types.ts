@@ -17,8 +17,8 @@ export interface UserProfile {
   slug: string
   count: number
   public: boolean
+  x_username?: string
 }
-
 export interface UpdateUserCounterArgs {
   pageId: string
   count: number
@@ -57,4 +57,25 @@ export interface IResponseGetQuestionPagination {
   data: Question[]
   hasMore: boolean
   next: string
+}
+
+export interface CustomOg {
+  uid: string
+  slug: string
+  mode: 'simple' | 'advance'
+  theme: 'hyper' | 'oceanic' | 'pumkin' | 'candy'
+  simple_text: string
+  code_public: string
+  code_question: string
+  created_time: string
+}
+
+export interface CreateCustomOgArgs {
+  uid: string
+  slug: string
+  mode: 'simple' | 'advance'
+  theme: string
+  simpleText: string
+  codePublic: string
+  codeQuestion: string
 }
