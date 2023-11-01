@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
-import { BaseDialog } from '@/components/dialog/BaseDialog'
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+
+import { BaseDialog } from "@/components/dialog/BaseDialog";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -67,6 +69,7 @@ export default function RootLayout({
             <BaseDialog />
             <Toaster />
           </ThemeProvider>
+          <ReactQueryDevtools initialIsOpen={false} />
         </QueryProvider>
       </body>
     </html>

@@ -1,6 +1,7 @@
 import { User } from 'firebase/auth'
 
-import { Question, UpdateUserArgs, UserProfile } from './types'
+import { IResponseGetQuestionPagination, Question, UpdateUserArgs, UserProfile } from './types'
+import  {httpClient } from './utils'
 
 export const BASEURL = `${process.env.NEXT_PUBLIC_BASE_URL}`
 
@@ -249,5 +250,34 @@ export const patchQuestionAsPublicOrPrivate = async (
       },
     },
   )
+  return rawRes.json()
+}
+
+
+export const getAllQuestionsWithPagination = async ({
+  user,
+  limit,
+  cursor,
+}: {
+  user: User
+  limit: number
+  cursor?: string
+}): Promise<IResponseGetQuestionPagination> => {
+  const token = await user.getIdToken()
+
+  const rawRes = await httpClient(
+    `${BASEURL}/api/private/question/by-uid/pagination/${user.uid}?limit=${limit}&cursor=${cursor}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
+      },
+      next: {
+        tags: ['q-by-uid', user.uid],
+      },
+    },
+  )
+
   return rawRes.json()
 }

@@ -1,88 +1,56 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+
+import { Loader2 } from "lucide-react";
 
 import EmptyState from "@/components/EmptyState";
 import { useAuth } from "@/components/FirebaseAuth";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { getAllQuestions, getExistingUser } from "@/lib/api";
 import { getFirebaseAuth, trackEvent } from "@/lib/firebase";
-import { Question, UserProfile } from "@/lib/types";
+import { Question } from "@/lib/types";
+import { countQuestion } from "@/lib/utils";
+// import { AccountVisibilityReminder } from '@/modules/AccountSettings/AccountVisibilityReminder'
 import { QuestionPanel } from "@/modules/AccountSettings/QuestionCard";
 import { QuestionLoader } from "@/modules/AccountSettings/QuestionLoader";
 import { QuestionResponsive } from "@/modules/AccountSettings/QuestionPreview/QuestionResponsive";
 import { StatisticPanel } from "@/modules/AccountSettings/StatisticPanel";
+import { useOwner, useQuestionListPagination } from "@/queries/useQueries";
 
 const auth = getFirebaseAuth();
+const LIMIT = 10;
 
 export default function Account() {
-  const router = useRouter();
-  const [isLoadingData, setIsLoadingData] = useState<boolean>(true);
   const [isOpenDialog, setIsOpenDialog] = useState<boolean>(false);
-  const [owner, setOwner] = useState<UserProfile | null>(null);
   const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(
     null,
   );
-  const [questions, setQuestions] = useState<Question[]>([]);
   const { isLogin, isLoading, user } = useAuth(auth);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const fetchQuestionsFromDb = async (skipLoader = false) => {
-    if (!skipLoader) {
-      setIsLoadingData(true);
-    }
-    if (user) {
-      const res = await getAllQuestions(user);
+  // @ts-ignore
+  const { data: dataOwner, isLoading: isLoadingOwner } = useOwner(user, {
+    enabled: !isLoading && isLogin && !!user,
+  });
 
-      if (res && res.data) {
-        setQuestions(res.data || []);
-      }
-    }
-    if (!skipLoader) {
-      setIsLoadingData(false);
-    }
-  };
-
-  const fetchUserFromDb = async (skipLoader = false) => {
-    if (!skipLoader) {
-      setIsLoadingData(true);
-    }
-    if (user) {
-      const res = await getExistingUser(user);
-
-      if (res && res.data) {
-        setOwner(res.data);
-      }
-    }
-    if (!skipLoader) {
-      setIsLoadingData(false);
-    }
-  };
-
-  const fetchInitialData = async () => {
-    setIsLoadingData(true);
-    await fetchUserFromDb(true);
-    await fetchQuestionsFromDb(true);
-    setIsLoadingData(false);
-  };
+  const {
+    data: dataPagination,
+    isLoading: isLoadingQuestions,
+    fetchNextPage,
+    isFetching,
+  } = useQuestionListPagination(
+    // @ts-ignore
+    user,
+    LIMIT,
+    {
+      enabled: !isLoading && isLogin && !!user,
+    },
+  );
 
   const handleClickQuestion = (question: Question) => {
     setSelectedQuestion(question);
     setIsOpenDialog(true);
   };
-
-  // Redirect back to /login --> if the session is not found
-  useEffect(() => {
-    if (!isLoading) {
-      if (!isLogin) {
-        router.push("/login");
-      } else {
-        fetchInitialData();
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLogin, isLoading, router]);
 
   useEffect(() => {
     trackEvent("view account page");
@@ -90,69 +58,94 @@ export default function Account() {
 
   return (
     <>
-      <main className="w-full container py-8">
-        <div className="w-full space-y-0.5">
-          <h2 className="text-2xl font-bold tracking-tight">
-            Entry Question List
-          </h2>
-          <p className="text-muted-foreground">
-            See all available anonymous questions
-          </p>
-        </div>
+      <div className="w-full space-y-0.5">
+        <h2 className="text-2xl font-bold tracking-tight">
+          Daftar Pertanyaan Masuk
+        </h2>
+        <p className="text-muted-foreground">
+          Lihat semua daftar pertanyaan anonim yang tersedia
+        </p>
+      </div>
 
-        <Separator className="my-6" />
+      <Separator className="my-6" />
 
-        <div className="w-full flex flex-col gap-4">
-          {isLoadingData ? (
-            <>
-              <StatisticPanel owner={owner} />
+      <div className="w-full flex flex-col gap-6">
+        <StatisticPanel owner={dataOwner?.data} />
+        {isLoadingOwner || isLoadingQuestions ? (
+          <div className="space-y-4">
+            <h3 className="text-2xl font-bold tracking-tight">
+              Memuat data pertanyaan...
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+              {[1, 2, 3].map((item) => (
+                <QuestionLoader key={item} index={item} />
+              ))}
+            </div>
+          </div>
+        ) : dataPagination?.pages &&
+          dataPagination.pages &&
+          dataPagination?.pages[0].data.length > 0 ? (
+          <div className="space-y-4">
+            <h3 className="text-2xl font-bold tracking-tight">
+              {countQuestion(dataPagination.pages)} pertanyaan belum dijawab
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+              {dataPagination.pages.map((questionParent, indexParent) => {
+                return (
+                  <React.Fragment key={indexParent}>
+                    {questionParent?.data?.map((q, indexQuestion) => {
+                      return (
+                        <QuestionPanel
+                          key={q.uid}
+                          owner={dataOwner?.data}
+                          question={q}
+                          onClick={handleClickQuestion}
+                          index={indexParent * LIMIT + indexQuestion + 1}
+                        />
+                      );
+                    })}
+                  </React.Fragment>
+                );
+              })}
+            </div>
+            <div className="flex  justify-center">
+              {dataPagination?.pages[dataPagination?.pages.length - 1]
+                .hasMore ? (
+                <Button
+                  disabled={isFetching}
+                  onClick={() => fetchNextPage()}
+                  className="w-[400px]"
+                >
+                  {!isFetching ? (
+                    "Load More"
+                  ) : (
+                    <>
+                      <Loader2 className="animate-spin" size={20} /> Loading
+                    </>
+                  )}
+                </Button>
+              ) : null}
+            </div>
+          </div>
+        ) : (
+          <EmptyState
+            title="Tidak ada satupun pertanyaan"
+            description="Maaf, tapi sepertinya tidak ada satupun pertanyaan yang belum kamu baca. Mulai bagikan halaman publikmu dan dapatkan pertanyaan dari siapapun."
+          />
+        )}
+      </div>
 
-              <h3 className="text-2xl font-bold tracking-tight flex gp-2 items-center">
-                Loading questions...
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-                {[1, 2, 3].map((item) => (
-                  <QuestionLoader key={item} index={item} />
-                ))}
-              </div>
-            </>
-          ) : (
-            <>
-              <StatisticPanel owner={owner} />
-              {questions && questions.length > 0 ? (
-                <>
-                  <h3 className="text-2xl font-bold tracking-tight flex gp-2 items-center">
-                    {questions.length} questions unanswered
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-                    {questions.map((q: Question, index) => (
-                      <QuestionPanel
-                        key={q.uuid}
-                        owner={owner}
-                        question={q}
-                        onClick={handleClickQuestion}
-                        index={index + 1}
-                      />
-                    ))}
-                  </div>
-                </>
-              ) : (
-                <EmptyState
-                  title="There is not a single question"
-                  description="I'm sorry, but there doesn't seem to be a single question you haven't read. Start sharing your public page and get questions from anyone."
-                />
-              )}
-            </>
-          )}
-        </div>
-      </main>
+      {/* {!isLoadingOwner && (
+        <AccountVisibilityReminder
+          show={dataOwner ? !dataOwner.data.public : false}
+        />
+      )} */}
 
       <QuestionResponsive
         isOpen={isOpenDialog}
         onOpenChange={setIsOpenDialog}
         user={user}
-        owner={owner}
-        onRefetch={fetchQuestionsFromDb}
+        owner={dataOwner?.data}
         question={selectedQuestion}
       />
     </>

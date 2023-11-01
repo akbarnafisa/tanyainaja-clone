@@ -1,8 +1,9 @@
 import { type ClassValue, clsx } from "clsx";
+//@ts-ignore
 import domtoimage from 'dom-to-image-more'
 import { twMerge } from "tailwind-merge";
 
-import { ClassMap } from "./types";
+import { ClassMap, IResponseGetQuestionPagination } from "./types";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -146,4 +147,32 @@ export function downloadQuestion(questionId: string) {
         console.error("Opps, something went wrong!", error);
       });
   }
+}
+
+
+export function httpClient(input: RequestInfo | URL, init?: RequestInit) {
+  const promise = new Promise<Response>(async (resolve, reject) => {
+    try {
+      const response = await fetch(input, init)
+      if (response.ok) {
+        resolve(response)
+      } else {
+        reject(response)
+      }
+    } catch (error) {
+      reject(error)
+    }
+  })
+
+  return promise
+}
+
+export function countQuestion(arr: IResponseGetQuestionPagination[]) {
+  let totalQuestion = 0
+
+  for (let i = 0; i < arr.length; i++) {
+    totalQuestion += arr[i].data.length
+  }
+
+  return totalQuestion
 }
