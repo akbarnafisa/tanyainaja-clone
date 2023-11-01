@@ -5,6 +5,8 @@ import { twMerge } from "tailwind-merge";
 
 import { ClassMap, IResponseGetQuestionPagination } from "./types";
 
+export const DEFAULT_AVATAR = 'https://api.dicebear.com/7.x/fun-emoji/svg'
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
