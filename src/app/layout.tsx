@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
+import { BaseDialog } from '@/components/dialog/BaseDialog'
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { BASEURL } from "@/lib/api";
+import QueryProvider from "@/queries/QueryProvider";
 
 import "./globals.css";
 
@@ -55,14 +57,17 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <main>
-            <Header />
-            <article className="min-h-screen">{children}</article>
-            <Footer />
-          </main>
-          <Toaster />
-        </ThemeProvider>
+        <QueryProvider>
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+            <main>
+              <Header />
+              <article className="min-h-screen">{children}</article>
+              <Footer />
+            </main>
+            <BaseDialog />
+            <Toaster />
+          </ThemeProvider>
+        </QueryProvider>
       </body>
     </html>
   );
